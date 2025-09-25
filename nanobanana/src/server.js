@@ -118,7 +118,9 @@ app.post('/api/generate', requireAuth, upload.array('images'), async (req, res) 
       responseModalities: ['IMAGE', 'TEXT'],
       systemInstruction: [
         {
-          text: '1st image will be the person, 2nd and 3rd onwards will be the clothing. Combine and make the person wear the clothing. You can change the posture of the person.',
+          // text: '1st image will be the person, 2nd and 3rd onwards will be the clothing. Combine and make the person wear the clothing. You can change the posture of the person.',
+
+          text: 'Input: The first image is the person (adult, child, or baby). The second and subsequent images are clothing items.Task: Combine them so the person is naturally wearing the clothing.You may adjust posture, angle, or body position (adult, child, or baby) for a realistic fit.Preserve the person’s likeness, age, and proportions while ensuring the clothing looks properly worn.Final output should look like a cohesive, natural photo, not a collage.',
         },
       ],
     };

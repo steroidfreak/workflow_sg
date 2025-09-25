@@ -34,13 +34,9 @@ const useCases: UseCaseItem[] = [
     component: 'WhatsAppTriggerButton',
     title: 'WhatsApp Trigger Button',
     description:
-      'Prototype a WhatsApp automation entry point. Replace this placeholder with your Cloud API or Twilio flow to capture and qualify leads instantly.',
+      'Kick off a WhatsApp automation via n8n. Messages route through Pinecone for retrieval and answer with OpenAI in seconds.',
     ctaLabel: 'Preview trigger placeholder',
-    action: () => {
-      if (typeof window !== 'undefined') {
-        window.alert('WhatsApp trigger placeholder. Wire this up to your preferred provider when ready.');
-      }
-    },
+    action: () => openExternal('https://wa.me/6583695756'),
   },
   {
     component: 'DocumentAwareChatbot',
@@ -149,6 +145,7 @@ const UseCaseLauncher: React.FC = () => {
 };
 
 export default UseCaseLauncher;
+
 
 
 
