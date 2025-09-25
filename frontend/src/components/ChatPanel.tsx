@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+﻿import React, { useCallback, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { sendChatMessage, type ChatMessage } from '../lib/chatApi';
 
@@ -49,17 +49,17 @@ const ChatPanel: React.FC = () => {
   );
 
   return (
-    <section className="mx-auto max-w-6xl px-6">
+    <section id="chatbot" className="mx-auto max-w-6xl px-6">
       <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white/80 shadow-xl shadow-slate-200/70 backdrop-blur dark:border-white/10 dark:bg-slate-900/70 dark:shadow-sky-500/20">
         <div className="grid gap-10 p-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Ask the product assistant</h3>
+            <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Explore your automation assistant</h3>
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              Try questions about features, pricing, or implementation details. Answers cite the exact content chunk so you can verify what the model sees.
+              Ask how we stitch together AI, n8n, and your existing tools. Responses reference the policies and SOPs you provide so stakeholders can see exactly where an answer comes from.
             </p>
             <div className="space-y-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/70">
               <div className="space-y-3 max-h-64 overflow-y-auto pr-2 text-sm">
-                {messages.length === 0 && <p className="text-slate-500 dark:text-slate-500">No conversation yet. Ask your first question below.</p>}
+                {messages.length === 0 && <p className="text-slate-500 dark:text-slate-500">No questions yet. Try asking how Workflow.sg would plug into your stack.</p>}
                 {messages.map((message, index) => (
                   <motion.div
                     key={`${message.role}-${index}-${message.content.slice(0, 8)}`}
@@ -87,7 +87,7 @@ const ChatPanel: React.FC = () => {
                     value={input}
                     disabled={isSubmitting}
                     onChange={(event) => setInput(event.target.value)}
-                    placeholder="e.g. How do I connect the API to Slack?"
+                    placeholder="e.g. How do we sync WhatsApp leads into HubSpot?"
                     className="flex-1 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none focus:ring focus:ring-sky-400/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-white dark:placeholder:text-slate-500"
                   />
                   <button
@@ -105,9 +105,9 @@ const ChatPanel: React.FC = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h4 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-                assistant reply
+                workflow assistant
               </h4>
-              <span className="text-xs text-slate-500">Grounded responses</span>
+              <span className="text-xs text-slate-500">Cited responses</span>
             </div>
             <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 text-sm text-slate-700 shadow-sm dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-200">
               {latestAssistantMessage ? (

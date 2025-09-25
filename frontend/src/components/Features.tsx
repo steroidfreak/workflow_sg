@@ -1,31 +1,37 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from './SectionHeader';
 
 const features = [
   {
-    title: 'Composable UI blocks',
+    title: 'AI automation across every channel',
     description:
-      'Pre-built sections with sensible defaults. Mix, match, and ship polished experiences without fiddling with boilerplate.',
-    icon: '??',
+      'Replace manual email replies, WhatsApp follow ups, form triage, and back-office updates with dependable AI flows that stay on brand.',
+    icon: 'AI',
   },
   {
-    title: 'Crafted for AI products',
+    title: 'Custom web apps that fit your stack',
     description:
-      'Chat-ready layout, citation modals, and loading states designed to support LLM-powered features from day one.',
-    icon: '??',
+      'React + Node.js builds that integrate with the tools you already use, extending operations without bloated platforms or licensing surprises.',
+    icon: '<>',
   },
   {
-    title: 'Motion-first architecture',
+    title: 'Policy-aware chatbots with citations',
     description:
-      'Framer Motion orchestrations drive cohesive entrances and subtle micro-interactions so everything feels alive.',
-    icon: '?',
+      'RAG pipelines grounded in your PDFs, SOPs, and knowledge bases so every answer is accurate, referenced, and easy to trust.',
+    icon: 'Q&A',
   },
   {
-    title: 'Production minded',
+    title: 'WhatsApp-first customer journeys',
     description:
-      'Responsive by default, accessible color contrast, and sensible tokens make the hand-off to engineering seamless.',
-    icon: '??',
+      'Capture leads, qualify prospects, and hand over to sales with seamless automation that keeps conversations human-ready.',
+    icon: 'WA',
+  },
+  {
+    title: 'Process design before automation',
+    description:
+      'We map workflows, surface bottlenecks, and agree on success metrics so every build targets measurable ROI from day one.',
+    icon: 'MAP',
   },
 ];
 
@@ -34,9 +40,9 @@ const Features: React.FC = () => {
     <section id="features" className="mx-auto max-w-6xl px-6">
       <div className="space-y-12">
         <SectionHeader
-          eyebrow="why it works"
-          title="Launch with structure, iterate with confidence"
-          description="Every section is responsive, themeable, and animation-ready so your team can focus on the core product experience."
+          eyebrow="capabilities"
+          title="Practical automation that scales with your SME"
+          description="Every engagement starts with your existing workflow. We slot in AI, custom apps, and integrations where they save hours, not create new busywork."
         />
         <div className="grid gap-6 sm:grid-cols-2">
           {features.map((feature, index) => (
@@ -50,7 +56,7 @@ const Features: React.FC = () => {
             >
               <div className="absolute inset-px rounded-[22px] border border-white/60 dark:border-white/5" />
               <div className="relative flex h-full flex-col gap-4">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-2xl dark:bg-sky-500/20">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-sm font-semibold tracking-[0.1em] text-sky-700 dark:bg-sky-500/20 dark:text-sky-200">
                   {feature.icon}
                 </span>
                 <div className="space-y-2">

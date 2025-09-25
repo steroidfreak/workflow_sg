@@ -1,19 +1,19 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from './SectionHeader';
 
 const mockSteps = [
   {
-    label: 'Ask a question',
-    content: '"How do I configure staging with feature flags?"',
+    label: 'Capture lead',
+    content: 'Prospect messages on WhatsApp. AI captures intent, urgency, and company details in under 10 seconds.',
   },
   {
-    label: 'System retrieves docs',
-    content: 'Source: deployment.md - section 4.2',
+    label: 'Instant reply',
+    content: 'Bot replies with product fit, pricing guidance, and next steps grounded in your approved responses.',
   },
   {
-    label: 'Assistant replies with citations',
-    content: 'Includes inline links and a modal preview of the exact doc chunk.',
+    label: 'Sales handover',
+    content: 'Qualified lead, conversation transcript, and recommended follow-up land in your CRM and team chat automatically.',
   },
 ];
 
@@ -25,9 +25,9 @@ const Showcase: React.FC = () => {
           <div className="space-y-8">
             <SectionHeader
               align="left"
-              eyebrow="demo preview"
-              title="Bring your AI workflows to life"
-              description="Highly-polished cards, callouts, and timelines make it easy to tell your product story without custom builds."
+              eyebrow="use case"
+              title="Lead capture to sales handover—fully automated"
+              description="This is how Workflow.sg keeps enquiries warm 24/7. From the first message to a ready-to-act sales brief, every step is orchestrated without manual chasing."
             />
             <div className="space-y-4">
               {mockSteps.map((step, index) => (
@@ -59,19 +59,19 @@ const Showcase: React.FC = () => {
                 <div className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/60">
                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400">assistant</p>
                   <p className="text-sm text-slate-700 dark:text-slate-100">
-                    Great news-staging supports feature flags via environment keys. Toggle them in your dashboard and our SDK will mirror the changes instantly.
+                    Hi Jasmine! Thanks for reaching out about automating scheduling. Based on your policies, the SME bundle fits best at $280/month. I can connect you with Desmond for a walkthrough at 3pm or 5pm today—what works?
                   </p>
                   <div className="flex flex-wrap items-center gap-2 pt-2 text-[11px] text-sky-700 dark:text-sky-300">
-                    <span className="rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10">deployment.md</span>
-                    <span className="rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10">feature-flags.mdx</span>
+                    <span className="rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10">pricing-guide.pdf</span>
+                    <span className="rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10">service-policies.docx</span>
                   </div>
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-400">
-                  <p className="font-semibold uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300">confidence</p>
+                  <p className="font-semibold uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300">time saved</p>
                   <div className="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800">
                     <motion.div
                       initial={{ width: '0%' }}
-                      whileInView={{ width: '86%' }}
+                      whileInView={{ width: '92%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
                       className="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400"
@@ -79,8 +79,8 @@ const Showcase: React.FC = () => {
                   </div>
                 </div>
                 <div className="rounded-2xl border border-sky-200 bg-sky-50 p-4 text-xs text-sky-700 dark:border-sky-500/40 dark:bg-sky-500/10 dark:text-sky-100">
-                  <p className="font-semibold uppercase tracking-[0.3em]">up next</p>
-                  <p className="mt-2">Summarise staging rollout steps, generate release notes, push to Notion.</p>
+                  <p className="font-semibold uppercase tracking-[0.3em]">next action</p>
+                  <p className="mt-2">Push summary + call slots to HubSpot, notify sales channel, log outcome to n8n.</p>
                 </div>
               </div>
             </div>

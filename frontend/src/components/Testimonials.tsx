@@ -1,25 +1,25 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from './SectionHeader';
 
 const testimonials = [
   {
     quote:
-      'We shipped our new onboarding flow in half the time. The animations feel premium and the responsive defaults saved us countless QA cycles.',
-    name: 'Mila Hart',
-    role: 'Head of Design, RelayOps',
+      'Our WhatsApp enquiries now route themselves. Leads get instant answers with citations, and my sales team only steps in when the customer is ready to book. Response time went from hours to seconds.',
+    name: 'Clara Lim',
+    role: 'Operations Manager, Logistics SME',
   },
   {
     quote:
-      'Our engineers can now focus on business logic instead of rebuilding marketing sections. The chat panel scaffolding was an unexpected gift.',
-    name: 'Oscar Jimenez',
-    role: 'CTO, NovaForge',
+      'Workflow.sg mapped our onboarding process before writing a single line of code. The custom app they built on React and n8n now saves us 70 man-hours every month.',
+    name: 'Hanif Rahman',
+    role: 'COO, Regional Maintenance Services',
   },
   {
     quote:
-      'The built-in citation UX means our customers trust the responses from day one. We dropped in our API keys and demoed it the same afternoon.',
-    name: 'Harper Lee',
-    role: 'Product Lead, AtlasAI',
+      'Policy-aware Q&A means our team finally trusts the assistant. New hires use it to find SOP answers with citations, and interruptions to senior staff have dropped dramatically.',
+    name: 'Vanessa Teo',
+    role: 'HR Lead, Healthcare Group',
   },
 ];
 
@@ -28,9 +28,9 @@ const Testimonials: React.FC = () => {
     <section id="testimonials" className="mx-auto max-w-6xl px-6">
       <div className="space-y-12">
         <SectionHeader
-          eyebrow="people are talking"
-          title="Designed with teams in mind"
-          description="Product design, engineering, and GTM teams use this scaffold to prototype confidently and iterate on AI-first experiences."
+          eyebrow="client outcomes"
+          title="Built for SMEs that need progress fast"
+          description="Leaders across operations, HR, and sales trust Workflow.sg to remove manual work, surface reliable answers, and prove ROI within weeks."
         />
         <div className="grid gap-6 md:grid-cols-3">
           {testimonials.map((testimonial, index) => (

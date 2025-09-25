@@ -1,9 +1,9 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 
 const CTA: React.FC = () => {
   return (
-    <section className="mx-auto max-w-5xl px-6">
+    <section id="cta" className="mx-auto max-w-5xl px-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -14,23 +14,23 @@ const CTA: React.FC = () => {
         <div className="flex flex-col gap-6 text-center md:flex-row md:items-center md:justify-between md:text-left">
           <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600 dark:text-sky-200">
-              ready when you are
+              ready to automate
             </p>
             <h3 className="text-3xl font-semibold text-slate-900 dark:text-white sm:text-4xl">
-              Start building your AI landing page today
+              Start with a free workflow audit
             </h3>
             <p className="max-w-lg text-sm text-slate-600 dark:text-slate-100/80">
-              Fork the repo, wire up your endpoints, and publish the marketing story that does your product justice.
+              Desmond Chua will review your current processes, map the quick wins, and outline how AI, custom apps, and integrations can save hours within weeks.
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 md:items-end">
             <a
-              href="#"
+              href="mailto:desmond@workflow.sg?subject=Free%20Workflow%20Audit"
               className="inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
-              Launch the template
+              Book your session
             </a>
-            <span className="text-xs text-slate-500 dark:text-slate-200/60">No credit card required | MIT licensed</span>
+            <span className="text-xs text-slate-500 dark:text-slate-200/60">No obligation | Typical prep in under 30 minutes</span>
           </div>
         </div>
       </motion.div>

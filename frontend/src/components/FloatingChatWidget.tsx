@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+﻿import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { sendChatMessage, type ChatMessage } from '../lib/chatApi';
 
@@ -71,7 +71,7 @@ const FloatingChatWidget: React.FC = () => {
           >
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">Workflow Assistant</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">Workflow.sg Assistant</p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">Powered by OpenAI</p>
               </div>
               <button
@@ -86,7 +86,7 @@ const FloatingChatWidget: React.FC = () => {
               <div className="flex-1 space-y-3 overflow-y-auto p-3">
                 {messages.length === 0 && (
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Ask anything about Workflow SG and the assistant will help.
+                    Ask anything about Workflow.sg and the assistant will help.
                   </p>
                 )}
                 {messages.map((message, index) => (
@@ -131,7 +131,7 @@ const FloatingChatWidget: React.FC = () => {
         onClick={toggleWidget}
         className="inline-flex items-center gap-2 rounded-full bg-sky-500 px-5 py-3 text-sm font-semibold text-white shadow-xl shadow-sky-500/30 transition hover:bg-sky-400 focus:outline-none focus:ring focus:ring-sky-500/30"
       >
-        {isOpen ? 'Hide assistant' : 'Chat with Workflow SG'}
+        {isOpen ? 'Hide assistant' : 'Chat with Workflow.sg'}
       </button>
     </div>
   );
