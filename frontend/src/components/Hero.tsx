@@ -59,20 +59,35 @@ const Hero: React.FC = () => {
                 Seamlessly combines your product docs and user activity to deliver answers with linked citations so your users feel grounded and in control.
               </p>
             </div>
-            <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/60">
-              <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                Session ready
+            <div className="flex flex-col gap-4">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-dashed border-slate-300 bg-slate-100/70 text-slate-600 dark:border-white/20 dark:bg-slate-900/40 dark:text-slate-300">
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
+                  <span className="rounded-full bg-sky-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300">
+                    image placeholder
+                  </span>
+                  <p className="text-sm">
+                    Replace this block with your hero screenshot or product artwork to tailor the page.
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Suggested size: 1280 × 960 PNG (remember to update the alt text when you replace this).
+                  </p>
+                </div>
               </div>
-              <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
-                <p>- Auto-chunk documents</p>
-                <p>- Citation modals out of the box</p>
-                <p>- Framer Motion transitions pre-configured</p>
-              </div>
-              <div className="mt-auto flex justify-end">
-                <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700 dark:bg-sky-500/20 dark:text-sky-300">
-                  Deploy in minutes
-                </span>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/60">
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  Session ready
+                </div>
+                <div className="mt-4 space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                  <p>- Auto-chunk documents</p>
+                  <p>- Citation modals out of the box</p>
+                  <p>- Framer Motion transitions pre-configured</p>
+                </div>
+                <div className="mt-6 flex justify-end">
+                  <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700 dark:bg-sky-500/20 dark:text-sky-300">
+                    Deploy in minutes
+                  </span>
+                </div>
               </div>
             </div>
           </div>

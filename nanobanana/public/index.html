@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gemini Outfit Composer</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="app-header">
+      <div class="app-header__meta">
+        <h1>Gemini Outfit Composer</h1>
+        <p>Upload, paste, or capture photos. Put the person photo first, then add clothing references. Adjust the prompt for styling instructions.</p>
+      </div>
+      <button type="button" id="logout-btn" class="secondary">Sign out</button>
+    </header>
+
+    <section class="input-panel">
+      <div class="drop-zone" id="drop-zone">
+        <p><strong>Drop</strong>, <strong>paste</strong>, or <strong>capture</strong> images (PNG/JPG/WebP). The first image should be the person.</p>
+        <div class="drop-zone__actions">
+          <button type="button" id="browse-btn">Browse files</button>
+          <button type="button" id="camera-btn" class="secondary">Take photo</button>
+        </div>
+        <input type="file" id="file-input" accept="image/*" multiple hidden />
+      </div>
+      <ol class="tips">
+        <li>Ensure the person photo is first in the list.</li>
+        <li>Add up to five clothing reference images.</li>
+        <li>Use the prompt field to describe the desired outfit or adjustments.</li>
+      </ol>
+      <div id="previews" class="previews"></div>
+      <label class="prompt-label" for="prompt">Prompt</label>
+      <textarea id="prompt" rows="3" placeholder="Describe the outfit or pose adjustments (optional)"></textarea>
+      <button type="button" id="generate-btn" class="primary">Generate</button>
+    </section>
+
+    <section class="results" id="results">
+      <h2>Results</h2>
+      <div id="result-text"></div>
+      <div id="result-images" class="result-images"></div>
+    </section>
+  </main>
+
+  <section
+    class="camera-modal"
+    id="camera-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="camera-modal__content">
+      <header class="camera-modal__header">
+        <h2 id="camera-modal-title">Camera preview</h2>
+        <button type="button" class="icon-button" id="camera-close" aria-label="Close camera view">&times;</button>
+      </header>
+      <video id="camera-video" autoplay playsinline></video>
+      <div class="camera-modal__controls">
+        <button type="button" id="camera-capture">Capture</button>
+        <button type="button" id="camera-cancel" class="secondary">Close</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

@@ -25,11 +25,26 @@ services:
     networks:
       - workflow
 
+  nanobanana:
+    build:
+      context: ./nanobanana
+      dockerfile: Dockerfile
+    container_name: nanobanana-app
+    env_file:
+      - ./nanobanana/.env
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - nanobanana-outputs:/app/outputs
+    networks:
+      - workflow
+
   caddy:
     image: caddy:2.8-alpine
     container_name: workflow-caddy
     depends_on:
       - frontend
+      - nanobanana
     ports:
       - "80:80"
       - "443:443"
@@ -40,6 +55,7 @@ services:
     environment:
       - DOMAIN=${DOMAIN:-www.workflow.sg}
       - CADDY_ADMIN_EMAIL=${CADDY_ADMIN_EMAIL:-admin@workflow.sg}
+      - NANOBANANA_DOMAIN=${NANOBANANA_DOMAIN:-nanobanana.workflow.sg}
     networks:
       - workflow
 
@@ -50,3 +66,4 @@ networks:
 volumes:
   caddy-data:
   caddy-config:
+  nanobanana-outputs:
