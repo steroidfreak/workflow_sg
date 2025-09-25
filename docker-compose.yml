@@ -1,35 +1,63 @@
 version: "3.9"
 
+networks:
+  workflow:
+    external: true   # make sure this network exists: `docker network create workflow`
+
+volumes:
+  caddy-data:
+  caddy-config:
+  nanobanana-outputs:
+
 services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: workflow-backend
     env_file:
       - ./backend/.env
     environment:
       - NODE_ENV=production
+    expose:
+      - "3000"
     networks:
       - workflow
+    restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: workflow-frontend
     depends_on:
       - backend
-    environment:
-      - VITE_API_BASE_URL=
+    expose:
+      - "80"
     networks:
       - workflow
+    restart: unless-stopped
+
+  nanobanana:
+    build:
+      context: ./nanobanana
+      dockerfile: Dockerfile
+    env_file:
+      - ./nanobanana/.env
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - nanobanana-outputs:/app/outputs
+    expose:
+      - "3000"
+    networks:
+      - workflow
+    restart: unless-stopped
 
   caddy:
     image: caddy:2.8-alpine
-    container_name: workflow-caddy
     depends_on:
+      - backend
       - frontend
+      - nanobanana
     ports:
       - "80:80"
       - "443:443"
@@ -39,14 +67,8 @@ services:
       - caddy-config:/config
     environment:
       - DOMAIN=${DOMAIN:-www.workflow.sg}
+      - NANOBANANA_DOMAIN=${NANOBANANA_DOMAIN:-nanobanana.workflow.sg}
       - CADDY_ADMIN_EMAIL=${CADDY_ADMIN_EMAIL:-admin@workflow.sg}
     networks:
       - workflow
-
-networks:
-  workflow:
-    external: true
-
-volumes:
-  caddy-data:
-  caddy-config:
+    restart: unless-stopped
