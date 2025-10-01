@@ -241,7 +241,7 @@ app.use((req, res, next) => {
   return serveStatic(req, res, next);
 });
 
-app.get('*', async (req, res, next) => {
+app.get(/.*/, async (req, res, next) => {
   if (req.path.startsWith('/api/')) {
     return next();
   }
