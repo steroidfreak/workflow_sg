@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gemini Dress-Up Playground</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <span class="floating-bubble floating-bubble--one" aria-hidden="true"></span>
+    <span class="floating-bubble floating-bubble--two" aria-hidden="true"></span>
+    <header class="app-header">
+      <div class="app-header__badge" aria-hidden="true">Yay! Dress-Up Time!</div>
+      <div class="app-header__meta">
+        <h1>Gemini Dress-Up Playground</h1>
+        <p>Let's dream up amazing outfits together! Add a happy picture of you, then share clothes or costume ideas you love.</p>
+        <ul class="app-header__steps">
+          <li><span class="step-number">1</span> Pop in a photo of you first so the magic knows your smile.</li>
+          <li><span class="step-number">2</span> Add up to five outfit ideas like capes, hats, or favorite tees.</li>
+          <li><span class="step-number">3</span> Tell the story in the Prompt box and tap the magic button!</li>
+        </ul>
+      </div>
+      <button type="button" id="logout-btn" class="secondary">Log out</button>
+    </header>
+
+    <section class="input-panel">
+      <div class="drop-zone" id="drop-zone">
+        <p class="drop-zone__title">Add your pictures!</p>
+        <p class="drop-zone__subtitle">Drag, drop, paste, or snap a photo. Put your selfie first, then your outfit inspirations (PNG, JPG, or WebP).</p>
+        <div class="drop-zone__actions">
+          <button type="button" id="browse-btn">Pick a file</button>
+          <button type="button" id="camera-btn" class="secondary">Use camera</button>
+        </div>
+        <input type="file" id="file-input" accept="image/*" multiple hidden />
+      </div>
+      <ol class="tips" aria-label="Helpful hints">
+        <li><strong>Start with you:</strong> Make the first picture a clear photo of you.</li>
+        <li><strong>Mix and match:</strong> Add clothes, costumes, or accessories for up to five ideas.</li>
+        <li><strong>Share your dream:</strong> Use the Prompt to describe colors, themes, or poses.</li>
+      </ol>
+      <div id="previews" class="previews"></div>
+      <label class="prompt-label" for="prompt">Prompt</label>
+      <textarea id="prompt" rows="4" placeholder="Tell the style machine about your dream look (optional)"></textarea>
+      <button type="button" id="generate-btn" class="primary">Make Magic!</button>
+    </section>
+
+    <section class="results" id="results">
+      <h2>Ta-da! Your Looks</h2>
+      <p class="results__caption">We'll show your story and pictures right here once the magic is done.</p>
+      <div id="result-text"></div>
+      <div id="result-images" class="result-images"></div>
+    </section>
+  </main>
+
+  <section
+    class="camera-modal"
+    id="camera-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="camera-modal__content">
+      <header class="camera-modal__header">
+        <h2 id="camera-modal-title">Camera preview</h2>
+        <button type="button" class="icon-button" id="camera-close" aria-label="Close camera view">&times;</button>
+      </header>
+      <video id="camera-video" autoplay playsinline></video>
+      <div class="camera-modal__controls">
+        <button type="button" id="camera-capture">Capture</button>
+        <button type="button" id="camera-cancel" class="secondary">Close</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      window.__APP_CONFIG__ = { apiBaseUrl: window.location.origin };
+    }
+  </script>
+  <script src="./app.js" type="module"></script>
+</body>
+</html>

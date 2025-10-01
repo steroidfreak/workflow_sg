@@ -33,7 +33,6 @@ const parsedOrigins = (CLIENT_ORIGIN ?? "")
   .filter(Boolean);
 
 const fallbackOrigins = [
-  "https://pixsnap.workflow.sg",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   `http://localhost:${PORT}`,
@@ -41,7 +40,6 @@ const fallbackOrigins = [
 ];
 const allowedOrigins = parsedOrigins.length ? parsedOrigins : fallbackOrigins;
 const allowedOriginSet = new Set(allowedOrigins);
-allowedOriginSet.add("https://pixsnap.workflow.sg");
 allowedOriginSet.add(`http://localhost:${PORT}`);
 allowedOriginSet.add(`http://127.0.0.1:${PORT}`);
 
@@ -243,7 +241,7 @@ app.use((req, res, next) => {
   return serveStatic(req, res, next);
 });
 
-app.get(/.*/, async (req, res, next) => {
+app.get('*', async (req, res, next) => {
   if (req.path.startsWith('/api/')) {
     return next();
   }
