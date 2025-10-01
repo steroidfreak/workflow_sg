@@ -53,10 +53,10 @@ services:
       - workflow
     restart: unless-stopped
 
-  pixsnap:
+  pixsnap-backend:
     build:
       context: ./pixsnap
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     env_file:
       - ./pixsnap/.env
     environment:
@@ -69,13 +69,26 @@ services:
       - workflow
     restart: unless-stopped
 
+  pixsnap-frontend:
+    build:
+      context: ./pixsnap/frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - pixsnap-backend
+    expose:
+      - "80"
+    networks:
+      - workflow
+    restart: unless-stopped
+
   caddy:
     image: caddy:2.8-alpine
     depends_on:
       - backend
       - frontend
       - nanobanana
-      - pixsnap
+      - pixsnap-backend
+      - pixsnap-frontend
     ports:
       - "80:80"
       - "443:443"
