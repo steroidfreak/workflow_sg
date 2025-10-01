@@ -31,6 +31,15 @@ const useCases: UseCaseItem[] = [
     action: () => openExternal('https://nanobanana.workflow.sg'),
   },
   {
+    component: 'PixsnapExperience',
+    title: 'Pixsnap Outfit Composer',
+    description:
+      'pixsnap.workflow.sg: Outfit product photography on demand. Merge references into clean hero shots in minutes.',
+    ctaLabel: 'Open pixsnap.workflow.sg',
+    action: () => openExternal('https://pixsnap.workflow.sg'),
+  },
+
+  {
     component: 'WhatsAppTriggerButton',
     title: 'WhatsApp Trigger Button',
     description:

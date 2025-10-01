@@ -1,8 +1,6 @@
-{
-  email {$CADDY_ADMIN_EMAIL}
+{  email {$CADDY_ADMIN_EMAIL}
 }
 
-# Main site: www.workflow.sg
 {$DOMAIN} {
   encode gzip zstd
 
@@ -23,12 +21,6 @@
   }
 }
 
-# Bare apex redirect → www
-workflow.sg {
-  redir https://www.workflow.sg{uri}
-}
-
-# NanoBanana subdomain (single server)
 {$NANOBANANA_DOMAIN} {
   encode gzip zstd
 
@@ -39,20 +31,11 @@ workflow.sg {
     Referrer-Policy "strict-origin-when-cross-origin"
   }
 
-  reverse_proxy nanobanana:3000
-}
-
-# Pixsnap subdomain (split stack)
-{$PIXSNAP_DOMAIN} {
-  encode gzip zstd
-
-  header {
-    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-    X-Content-Type-Options "nosniff"
-    X-Frame-Options "DENY"
-    Referrer-Policy "strict-origin-when-cross-origin"
+  handle {
+    reverse_proxy nanobanana:3000
   }
-
-  reverse_proxy pixsnap:4000
 }
 
+workflow.sg {
+  redir https://www.workflow.sg{uri}
+}

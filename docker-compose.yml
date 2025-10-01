@@ -8,6 +8,7 @@ volumes:
   caddy-data:
   caddy-config:
   nanobanana-outputs:
+  pixsnap-outputs:
 
 services:
   backend:
@@ -52,12 +53,29 @@ services:
       - workflow
     restart: unless-stopped
 
+  pixsnap:
+    build:
+      context: ./pixsnap
+      dockerfile: Dockerfile
+    env_file:
+      - ./pixsnap/.env
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - pixsnap-outputs:/app/outputs
+    expose:
+      - "4000"
+    networks:
+      - workflow
+    restart: unless-stopped
+
   caddy:
     image: caddy:2.8-alpine
     depends_on:
       - backend
       - frontend
       - nanobanana
+      - pixsnap
     ports:
       - "80:80"
       - "443:443"
@@ -68,7 +86,9 @@ services:
     environment:
       - DOMAIN=${DOMAIN:-www.workflow.sg}
       - NANOBANANA_DOMAIN=${NANOBANANA_DOMAIN:-nanobanana.workflow.sg}
+      - PIXSNAP_DOMAIN=${PIXSNAP_DOMAIN:-pixsnap.workflow.sg}
       - CADDY_ADMIN_EMAIL=${CADDY_ADMIN_EMAIL:-admin@workflow.sg}
     networks:
       - workflow
     restart: unless-stopped
+

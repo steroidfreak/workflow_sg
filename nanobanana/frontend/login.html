@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gemini Dress-Up Playground - Login</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <div class="login-ribbon" aria-hidden="true">Welcome, Style Star!</div>
+    <h1>Ready to Play?</h1>
+    <p class="login-subtitle">Log in so we can start crafting outfits with sparkles, color, and tons of imagination.</p>
+    <form id="login-form" class="login-form" autocomplete="off">
+      <label for="login-username">Username</label>
+      <input id="login-username" name="username" type="text" required autofocus />
+      <label for="login-password">Password</label>
+      <input id="login-password" name="password" type="password" required />
+      <button type="submit" class="primary" id="login-submit">Let's Go!</button>
+    </form>
+    <p id="login-error" class="status-message" role="alert" aria-live="assertive"></p>
+  </main>
+  <script src="./login.js" type="module"></script>
+</body>
+</html>
