@@ -1,0 +1,41 @@
+{  email {$CADDY_ADMIN_EMAIL}
+}
+
+{$DOMAIN} {
+  encode gzip zstd
+
+  header {
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+
+  @api path /api/*
+  handle @api {
+    reverse_proxy backend:3000
+  }
+
+  handle {
+    reverse_proxy frontend:80
+  }
+}
+
+{$NANOBANANA_DOMAIN} {
+  encode gzip zstd
+
+  header {
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+
+  handle {
+    reverse_proxy nanobanana:3000
+  }
+}
+
+workflow.sg {
+  redir https://www.workflow.sg{uri}
+}
