@@ -53,6 +53,13 @@ workflow.sg {
     Referrer-Policy "strict-origin-when-cross-origin"
   }
 
-  reverse_proxy pixsnap:4000
+  @pixsnap-api path /api/*
+  handle @pixsnap-api {
+    reverse_proxy pixsnap-backend:4000
+  }
+
+  handle {
+    reverse_proxy pixsnap-frontend:80
+  }
 }
 
