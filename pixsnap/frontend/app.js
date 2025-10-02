@@ -143,15 +143,14 @@ const createResultCard = (image, index) => {
   return figure;
 };
 
-const handleResultReveal = (event) => {
-  const cover = event.target.closest('.present-cover');
+const handleResultReveal = (cover) => {
   if (!cover) {
-    return;
+    return false;
   }
 
   const figure = cover.closest('.result-card');
   if (!figure || figure.dataset.state === 'revealed') {
-    return;
+    return false;
   }
 
   figure.dataset.state = 'revealed';
@@ -180,8 +179,81 @@ const handleResultReveal = (event) => {
   window.setTimeout(() => {
     cover.remove();
   }, 320);
+
+  return true;
 };
 
+const triggerDownload = (anchor) => {
+  const link = document.createElement('a');
+  link.href = anchor.href;
+  link.download = anchor.download || 'pixsnap-look.png';
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  window.requestAnimationFrame(() => {
+    document.body.removeChild(link);
+  });
+};
+
+const attemptShareFromAnchor = async (anchor) => {
+  if (!navigator.share || !window.File || !window.Blob) {
+    return 'unsupported';
+  }
+
+  const href = anchor.getAttribute('href');
+  if (!href) {
+    return 'unsupported';
+  }
+
+  try {
+    const response = await fetch(href);
+    const blob = await response.blob();
+    const fileName = anchor.getAttribute('download') || 'pixsnap-look.png';
+    const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+    const shareData = {
+      files: [file],
+      title: fileName,
+      text: 'Check out my Pixsnap look!',
+    };
+
+    if (navigator.canShare && !navigator.canShare(shareData)) {
+      return 'unsupported';
+    }
+
+    await navigator.share(shareData);
+    return 'shared';
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      return 'aborted';
+    }
+
+    console.warn('Native share failed', error);
+    return 'failed';
+  }
+};
+
+const handleResultImagesClick = async (event) => {
+  const cover = event.target.closest('.present-cover');
+  if (cover && handleResultReveal(cover)) {
+    return;
+  }
+
+  const saveAnchor = event.target.closest('.result-save');
+  if (!saveAnchor) {
+    return;
+  }
+
+  if (!navigator.share) {
+    return;
+  }
+
+  event.preventDefault();
+  const outcome = await attemptShareFromAnchor(saveAnchor);
+
+  if (outcome === 'unsupported' || outcome === 'failed') {
+    triggerDownload(saveAnchor);
+  }
+};
 const addFiles = (fileList) => {
   const accepted = Array.from(fileList).filter((file) => file?.type?.startsWith('image/'));
   const availableSlots = MAX_FILES - items.length;
@@ -250,7 +322,7 @@ previews.addEventListener('click', (event) => {
   }
 });
 
-resultImages?.addEventListener('click', handleResultReveal);
+resultImages?.addEventListener('click', handleResultImagesClick);
 
 const setGeneratingState = (generating) => {
   generateBtn.disabled = generating;
