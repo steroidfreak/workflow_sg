@@ -1,4 +1,4 @@
-﻿import { API_BASE_URL } from './config.js';
+import { API_BASE_URL } from './config.js';
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const browseBtn = document.getElementById('browse-btn');
@@ -14,6 +14,7 @@ const previews = document.getElementById('previews');
 const promptInput = document.getElementById('prompt');
 const resultText = document.getElementById('result-text');
 const resultImages = document.getElementById('result-images');
+const generationAudio = document.getElementById('generation-audio');
 
 const MAX_FILES = 6;
 let items = [];
@@ -69,6 +70,116 @@ const renderPreviews = () => {
     `;
     previews.appendChild(card);
   });
+};
+
+const sanitizeFileName = (value = '') => value.replace(/[\\/:*?"<>|]/g, '_');
+
+const ensureDownloadName = (fileName, index) => {
+  const fallback = `pixsnap-look-${index + 1}.png`;
+  if (!fileName) {
+    return fallback;
+  }
+  const trimmed = fileName.trim();
+  if (!trimmed) {
+    return fallback;
+  }
+  const sanitized = sanitizeFileName(trimmed);
+  const lower = sanitized.toLowerCase();
+  if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.webp')) {
+    return sanitized;
+  }
+  return `${sanitized}.png`;
+};
+
+const createResultCard = (image, index) => {
+  if (!image?.dataUrl) {
+    return null;
+  }
+
+  const displayName = (image.fileName || '').trim() || `Look ${index + 1}`;
+  const downloadName = ensureDownloadName(image.fileName, index);
+  const figure = document.createElement('figure');
+  figure.className = 'result-card';
+  figure.dataset.state = 'wrapped';
+
+  const img = document.createElement('img');
+  img.src = image.dataUrl;
+  img.alt = displayName;
+  img.loading = 'lazy';
+  img.setAttribute('aria-hidden', 'true');
+  figure.appendChild(img);
+
+  const caption = document.createElement('figcaption');
+  caption.className = 'result-caption';
+  caption.setAttribute('aria-hidden', 'true');
+
+  const captionText = document.createElement('span');
+  captionText.className = 'result-caption__text';
+  captionText.textContent = displayName;
+
+  const saveButton = document.createElement('a');
+  saveButton.className = 'result-save';
+  saveButton.href = image.dataUrl;
+  saveButton.download = downloadName;
+  saveButton.textContent = 'Save';
+  saveButton.setAttribute('tabindex', '-1');
+
+  caption.appendChild(captionText);
+  caption.appendChild(saveButton);
+  figure.appendChild(caption);
+
+  const cover = document.createElement('button');
+  cover.type = 'button';
+  cover.className = 'present-cover';
+  cover.setAttribute('aria-label', `Reveal ${displayName}`);
+  cover.innerHTML = `
+    <span class="present-cover__bow" aria-hidden="true"></span>
+    <span class="present-cover__ribbon present-cover__ribbon--vertical" aria-hidden="true"></span>
+    <span class="present-cover__ribbon present-cover__ribbon--horizontal" aria-hidden="true"></span>
+    <span class="present-cover__text">Tap to unwrap</span>
+  `;
+
+  figure.appendChild(cover);
+  return figure;
+};
+
+const handleResultReveal = (event) => {
+  const cover = event.target.closest('.present-cover');
+  if (!cover) {
+    return;
+  }
+
+  const figure = cover.closest('.result-card');
+  if (!figure || figure.dataset.state === 'revealed') {
+    return;
+  }
+
+  figure.dataset.state = 'revealed';
+
+  const img = figure.querySelector('img');
+  const caption = figure.querySelector('figcaption');
+  const saveButton = figure.querySelector('.result-save');
+
+  if (img) {
+    img.removeAttribute('aria-hidden');
+  }
+
+  if (caption) {
+    caption.removeAttribute('aria-hidden');
+  }
+
+  if (saveButton) {
+    saveButton.removeAttribute('tabindex');
+    saveButton.focus({ preventScroll: true });
+  }
+
+  cover.classList.add('present-cover--hidden');
+  cover.setAttribute('aria-hidden', 'true');
+  cover.disabled = true;
+
+  window.setTimeout(() => {
+    cover.remove();
+  }, 320);
 };
 
 const addFiles = (fileList) => {
@@ -139,12 +250,31 @@ previews.addEventListener('click', (event) => {
   }
 });
 
+resultImages?.addEventListener('click', handleResultReveal);
+
 const setGeneratingState = (generating) => {
   generateBtn.disabled = generating;
   if (generating) {
     generateBtn.innerHTML = '<span class="loading">Making magic...</span>';
+    if (generationAudio) {
+      try {
+        generationAudio.currentTime = 0;
+        const playPromise = generationAudio.play();
+        if (playPromise?.catch) {
+          playPromise.catch((error) => {
+            console.warn('Unable to play generation audio', error);
+          });
+        }
+      } catch (error) {
+        console.warn('Unable to play generation audio', error);
+      }
+    }
   } else {
     generateBtn.textContent = 'Make Magic!';
+    if (generationAudio) {
+      generationAudio.pause();
+      generationAudio.currentTime = 0;
+    }
   }
 };
 
@@ -286,16 +416,11 @@ const generate = async () => {
 
     resultImages.innerHTML = '';
     if (payload.images?.length) {
-      payload.images.forEach((image) => {
-        const container = document.createElement('figure');
-        const img = document.createElement('img');
-        img.src = image.dataUrl;
-        img.alt = image.fileName;
-        const caption = document.createElement('figcaption');
-        caption.textContent = image.fileName;
-        container.appendChild(img);
-        container.appendChild(caption);
-        resultImages.appendChild(container);
+      payload.images.forEach((image, index) => {
+        const card = createResultCard(image, index);
+        if (card) {
+          resultImages.appendChild(card);
+        }
       });
     }
 
