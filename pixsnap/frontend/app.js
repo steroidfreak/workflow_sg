@@ -15,10 +15,239 @@ const promptInput = document.getElementById('prompt');
 const resultText = document.getElementById('result-text');
 const resultImages = document.getElementById('result-images');
 const generationAudio = document.getElementById('generation-audio');
+const promptCarousel = document.getElementById('prompt-carousel');
+const promptNavButtons = document.querySelectorAll('[data-prompt-nav]');
 
 const MAX_FILES = 6;
 let items = [];
 let cameraStream = null;
+let selectedPromptButton = null;
+
+const promptIdeas = [
+  {
+    id: 'princess-costume',
+    title: 'Princess Costume',
+    description: 'Glitter cape, twirl skirt, and a friendly tiara.',
+    prompt: 'Create a princess costume with a pastel twirl dress, a shimmer cape, and comfy sparkly shoes. Add gentle sparkles and a playful tiara so it feels magical and easy to play in.',
+    badge: 'PC',
+    colors: ['#ffd1f7', '#ffe9fb'],
+  },
+  {
+    id: 'space-crew',
+    title: 'Space Explorer Suit',
+    description: 'Galaxy jacket, starlight boots, and comfy helmet.',
+    prompt: 'Design a space explorer outfit with a midnight blue jacket, glowing stars on the sleeves, and safe magnet boots. Add gentle rocket patches and a soft helmet with a clear visor.',
+    badge: 'SE',
+    colors: ['#d6e8ff', '#c9f1ff'],
+  },
+  {
+    id: 'pirate-parade',
+    title: 'Pirate Parade',
+    description: 'Striped vest, treasure map belt, and sea hat.',
+    prompt: 'Create a pirate parade costume with a bright striped vest, a treasure map belt, and a friendly sea captain hat. Include soft boots and a parrot badge for giggles.',
+    badge: 'PP',
+    colors: ['#ffe7c3', '#ffd4c4'],
+  },
+  {
+    id: 'dino-discovery',
+    title: 'Dino Discovery',
+    description: 'Leafy cape, pocket fossils, and dino tail.',
+    prompt: 'Make a dino discovery outfit with a leafy green cape, pockets for pretend fossils, and a soft dinosaur tail. Add cozy sneakers with tiny dino tracks.',
+    badge: 'DD',
+    colors: ['#e1ffd1', '#c8f5c1'],
+  },
+  {
+    id: 'ocean-hero',
+    title: 'Ocean Hero',
+    description: 'Wave jacket, bubble wand, and coral crown.',
+    prompt: 'Design an ocean hero costume with a shimmering wave jacket, a bubble wand accessory, and a coral crown. Use sea glass colors and keep everything splash-friendly and comfy.',
+    badge: 'OH',
+    colors: ['#c6f5ff', '#d4ecff'],
+  },
+  {
+    id: 'jungle-safari',
+    title: 'Jungle Safari',
+    description: 'Explorer vest, animal patches, and vine scarf.',
+    prompt: 'Create a jungle safari look with a breezy explorer vest, animal friendship patches, and a soft vine scarf. Include sturdy play shoes and a tiny binocular necklace.',
+    badge: 'JS',
+    colors: ['#e8f7d8', '#f5efd1'],
+  },
+  {
+    id: 'winter-wonder',
+    title: 'Winter Wonder',
+    description: 'Snowflake cape, fuzzy mitts, and warm boots.',
+    prompt: 'Design a winter wonder outfit with a sparkling snowflake cape, fuzzy mittens, and warm starry boots. Add a cozy beanie with a pom-pom and gentle pastel colors.',
+    badge: 'WW',
+    colors: ['#e7f1ff', '#f2f6ff'],
+  },
+  {
+    id: 'festival-popstar',
+    title: 'Festival Pop Star',
+    description: 'Rainbow jacket, musical belt, and confetti shoes.',
+    prompt: 'Create a festival pop star costume with a rainbow jacket, a musical note belt, and confetti sparkle shoes. Include a microphone bracelet and bright stage lights on the sleeves.',
+    badge: 'FP',
+    colors: ['#ffd6f2', '#ffe8d6'],
+  },
+  {
+    id: 'science-lab',
+    title: 'Science Lab Hero',
+    description: 'Color lab coat, gadget gloves, and glow goggles.',
+    prompt: 'Design a science lab hero outfit with a colorful lab coat, glow-in-the-dark goggles, and soft gadget gloves. Add pockets for experiment cards and comfy sneakers.',
+    badge: 'SL',
+    colors: ['#dff6ff', '#e6e9ff'],
+  },
+];
+
+const surpriseBits = {
+  colors: ['cotton candy', 'midnight blue', 'sunset orange', 'minty fresh', 'glittering starlight', 'bubblegum pink', 'neon lime'],
+  characters: ['space explorer', 'forest fairy', 'underwater scientist', 'robot inventor', 'adventure chef', 'dino ranger'],
+  settings: ['ready for a moon parade', 'perfect for a school talent show', 'for a sunny park playdate', 'made for a secret mission', 'for a royal tea party', 'for a snowy festival'],
+  extras: ['a cape that shimmers when you twirl', 'pockets filled with friendly gadgets', 'a hat that lights up with glow stars', 'a backpack covered in stickers', 'soft gloves with sparkling patterns', 'boots that leave rainbow footprints'],
+};
+
+const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
+
+const toTitleCase = (value) => value.replace(/\b\w/g, (match) => match.toUpperCase());
+
+const createPromptCard = (idea) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'prompt-card';
+  button.setAttribute('role', 'listitem');
+  button.setAttribute('aria-pressed', 'false');
+  button.dataset.promptId = idea.id;
+  if (idea.type) {
+    button.dataset.promptType = idea.type;
+  }
+  if (idea.prompt) {
+    button.dataset.promptValue = idea.prompt;
+  }
+  if (Array.isArray(idea.colors) && idea.colors.length) {
+    button.style.setProperty('--prompt-card-start', idea.colors[0]);
+    button.style.setProperty('--prompt-card-end', idea.colors[1] || idea.colors[0]);
+  }
+  button.innerHTML = `
+    <span class="prompt-card__art" aria-hidden="true">
+      <span class="prompt-card__badge">${idea.badge || 'PP'}</span>
+    </span>
+    <span class="prompt-card__label">${idea.title}</span>
+    <span class="prompt-card__hint">${idea.description || ''}</span>
+  `;
+  return button;
+};
+
+const updateSelectedPrompt = (button, promptValue, { focus = true } = {}) => {
+  if (!button) {
+    return;
+  }
+
+  if (selectedPromptButton && selectedPromptButton !== button) {
+    selectedPromptButton.classList.remove('is-selected');
+    selectedPromptButton.setAttribute('aria-pressed', 'false');
+  }
+
+  selectedPromptButton = button;
+  selectedPromptButton.classList.add('is-selected');
+  selectedPromptButton.setAttribute('aria-pressed', 'true');
+  selectedPromptButton.dataset.promptValue = promptValue;
+
+  if (promptInput) {
+    promptInput.value = promptValue;
+    if (focus) {
+      promptInput.focus({ preventScroll: true });
+    }
+  }
+};
+
+const buildSurprisePrompt = () => {
+  const color = pickRandom(surpriseBits.colors);
+  const character = pickRandom(surpriseBits.characters);
+  const setting = pickRandom(surpriseBits.settings);
+  const extra = pickRandom(surpriseBits.extras);
+  const title = `Surprise: ${toTitleCase(`${color} ${character}`)}`;
+  const hint = `Mix-ins: ${toTitleCase(character)}, ${color}, ${extra}`;
+  const prompt = `Design a ${color} ${character} outfit ${setting}. Include ${extra} and keep everything soft, safe, and playful for kids.`;
+  return { title, hint, prompt };
+};
+
+const applySurpriseToCard = (button) => {
+  const surprise = buildSurprisePrompt();
+  button.dataset.promptValue = surprise.prompt;
+  const label = button.querySelector('.prompt-card__label');
+  const hint = button.querySelector('.prompt-card__hint');
+  if (label) {
+    label.textContent = surprise.title;
+  }
+  if (hint) {
+    hint.textContent = surprise.hint;
+  }
+  return surprise.prompt;
+};
+
+const setupPromptCarousel = () => {
+  if (!promptCarousel || promptCarousel.dataset.enhanced === 'true') {
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  promptIdeas.forEach((idea) => {
+    const card = createPromptCard(idea);
+    fragment.appendChild(card);
+  });
+
+  const surpriseCard = createPromptCard({
+    id: 'surprise-mix',
+    title: 'Surprise Mixer',
+    description: 'Tap for a random outfit recipe every time.',
+    badge: '??',
+    colors: ['#c6f5ff', '#ffe8b8'],
+    type: 'surprise',
+  });
+
+  fragment.appendChild(surpriseCard);
+  promptCarousel.appendChild(fragment);
+  promptCarousel.dataset.enhanced = 'true';
+
+  promptCarousel.addEventListener('click', (event) => {
+    const card = event.target.closest('.prompt-card');
+    if (!card) {
+      return;
+    }
+
+    let promptValue = card.dataset.promptValue || '';
+    if (card.dataset.promptType === 'surprise' || !promptValue) {
+      promptValue = applySurpriseToCard(card);
+    }
+
+    updateSelectedPrompt(card, promptValue);
+  });
+
+  promptNavButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!promptCarousel) {
+        return;
+      }
+      const direction = button.dataset.promptNav === 'prev' ? -1 : 1;
+      const amount = promptCarousel.clientWidth ? promptCarousel.clientWidth * 0.8 : 240;
+      promptCarousel.scrollBy({ left: amount * direction, behavior: 'smooth' });
+    });
+  });
+};
+
+const clearSelectedPromptIfChanged = () => {
+  if (!promptInput || !selectedPromptButton) {
+    return;
+  }
+
+  const currentValue = promptInput.value.trim();
+  const selectedValue = (selectedPromptButton.dataset.promptValue || '').trim();
+  if (!currentValue || currentValue !== selectedValue) {
+    selectedPromptButton.classList.remove('is-selected');
+    selectedPromptButton.setAttribute('aria-pressed', 'false');
+    selectedPromptButton = null;
+  }
+};
+
 
 const redirectToLogin = () => {
   window.location.replace('./login.html');
@@ -506,6 +735,11 @@ const generate = async () => {
     setGeneratingState(false);
   }
 };
+
+setupPromptCarousel();
+if (promptInput) {
+  promptInput.addEventListener('input', clearSelectedPromptIfChanged);
+}
 
 generateBtn.addEventListener('click', generate);
 window.addEventListener('beforeunload', revokePreviews);

@@ -202,7 +202,7 @@ app.post("/api/generate", requireAuth, upload.array("images"), async (req, res) 
     });
 
     const images = [];
-    const texts = [];
+    let textBuffer = "";
     let fileIndex = 0;
 
     for await (const chunk of response) {
@@ -224,12 +224,18 @@ app.post("/api/generate", requireAuth, upload.array("images"), async (req, res) 
             dataUrl: `data:${mimeType};base64,${part.inlineData.data}`,
           });
         } else if (part.text) {
-          texts.push(part.text);
+          textBuffer += part.text;
         }
       }
     }
 
-    return res.json({ images, texts });
+    const normalizedText = textBuffer.replace(/\r\n/g, '\n');
+    const paragraphs = normalizedText
+      .split(/\n{2,}/)
+      .map((paragraph) => paragraph.replace(/\s+/g, ' ').trim())
+      .filter(Boolean);
+
+    return res.json({ images, texts: paragraphs });
   } catch (error) {
     console.error("Error generating content", error);
     return res.status(500).json({ error: "Failed to generate content. Check server logs for details." });

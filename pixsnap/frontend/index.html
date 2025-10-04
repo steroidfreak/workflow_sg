@@ -40,6 +40,17 @@
         <li><strong>Share your dream:</strong> Use the Prompt to describe colors, themes, or poses.</li>
       </ol>
       <div id="previews" class="previews"></div>
+      <section class="prompt-playground" aria-label="Prompt ideas">
+        <div class="prompt-playground__header">
+          <h2>Prompt Playground</h2>
+          <p>Tap a card or swipe to explore story starters for your outfit.</p>
+          <div class="prompt-playground__nav">
+            <button type="button" class="prompt-nav" data-prompt-nav="prev" aria-label="Scroll ideas left">&lsaquo;</button>
+            <button type="button" class="prompt-nav" data-prompt-nav="next" aria-label="Scroll ideas right">&rsaquo;</button>
+          </div>
+        </div>
+        <div class="prompt-carousel" id="prompt-carousel" role="list" aria-label="Prompt ideas"></div>
+      </section>
       <label class="prompt-label" for="prompt">Prompt</label>
       <textarea id="prompt" rows="4" placeholder="Tell the style machine about your dream look (optional)"></textarea>
       <button type="button" id="generate-btn" class="primary">Make Magic!</button>
