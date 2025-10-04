@@ -31,6 +31,7 @@ const promptIdeas = [
     prompt: 'Create a princess costume with a pastel twirl dress, a shimmer cape, and comfy sparkly shoes. Add gentle sparkles and a playful tiara so it feels magical and easy to play in.',
     badge: 'PC',
     colors: ['#ffd1f7', '#ffe9fb'],
+    badgeImage: './public/princess-costume.png',
   },
   {
     id: 'space-crew',
@@ -126,9 +127,12 @@ const createPromptCard = (idea) => {
     button.style.setProperty('--prompt-card-start', idea.colors[0]);
     button.style.setProperty('--prompt-card-end', idea.colors[1] || idea.colors[0]);
   }
+  const badgeContent = idea.badgeImage
+    ? `<img src="${idea.badgeImage}" alt="" class="prompt-card__badge-image">`
+    : `<span class="prompt-card__badge">${idea.badge || 'PP'}</span>`;
   button.innerHTML = `
     <span class="prompt-card__art" aria-hidden="true">
-      <span class="prompt-card__badge">${idea.badge || 'PP'}</span>
+      ${badgeContent}
     </span>
     <span class="prompt-card__label">${idea.title}</span>
     <span class="prompt-card__hint">${idea.description || ''}</span>
@@ -745,6 +749,7 @@ generateBtn.addEventListener('click', generate);
 window.addEventListener('beforeunload', revokePreviews);
 ensureAuthenticated();
 renderPreviews();
+
 
 
 
