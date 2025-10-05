@@ -1,15 +1,18 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTheme } from '../lib/theme';
+import { useDesign } from '../lib/design';
 
 const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { design } = useDesign();
+  const isModern = design === 'modern-programmer';
+
+  const buttonClass = isModern
+    ? 'inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 bg-slate-950/70 px-3 py-1.5 text-[11px] font-semibold text-cyan-100 shadow-lg shadow-cyan-500/20 transition hover:border-cyan-300 hover:text-cyan-50 focus:outline-none focus:ring focus:ring-cyan-500/40'
+    : 'inline-flex items-center gap-1.5 rounded-full border border-slate-300/60 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 shadow-sm transition hover:border-sky-400 hover:text-sky-600 focus:outline-none focus:ring focus:ring-sky-500/30 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:border-sky-400 dark:hover:text-sky-200';
 
   return (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      className="inline-flex items-center gap-1.5 rounded-full border border-slate-300/60 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 shadow-sm transition hover:border-sky-400 hover:text-sky-600 focus:outline-none focus:ring focus:ring-sky-500/30 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:border-sky-400 dark:hover:text-sky-200"
-    >
+    <button type="button" onClick={toggleTheme} className={buttonClass}>
       <span className="sr-only">Toggle theme</span>
       {theme === 'light' ? <MoonIcon /> : <SunIcon />}
       <span>{theme === 'light' ? 'Dark mode' : 'Light mode'}</span>
@@ -56,4 +59,3 @@ const MoonIcon: React.FC = () => (
 );
 
 export default ThemeToggle;
-

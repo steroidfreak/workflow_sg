@@ -6,11 +6,14 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import './index.css';
 import { ThemeProvider } from './lib/theme';
+import { DesignProvider } from './lib/design';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider>
-      <App />
+      <DesignProvider>
+        <App />
+      </DesignProvider>
     </ThemeProvider>
   </React.StrictMode>,
 );

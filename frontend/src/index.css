@@ -18,6 +18,16 @@ body {
   @apply bg-slate-950 text-slate-100;
 }
 
+body[data-design='modern-programmer'] {
+  background-color: #020617;
+  color: rgb(226 232 240);
+  font-family: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', 'Menlo', monospace;
+}
+
 * {
   font-family: 'Inter', sans-serif;
+}
+
+body[data-design='modern-programmer'] * {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', 'Menlo', monospace;
 }

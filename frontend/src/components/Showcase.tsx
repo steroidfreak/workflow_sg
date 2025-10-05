@@ -1,6 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from './SectionHeader';
+import { useDesign } from '../lib/design';
 
 const mockSteps = [
   {
@@ -18,9 +19,34 @@ const mockSteps = [
 ];
 
 const Showcase: React.FC = () => {
+  const { design } = useDesign();
+  const isModern = design === 'modern-programmer';
+
+  const containerClass = isModern
+    ? 'overflow-hidden rounded-[40px] border border-cyan-500/40 bg-slate-950/60 shadow-2xl shadow-cyan-500/20 backdrop-blur'
+    : 'overflow-hidden rounded-[40px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100 shadow-2xl shadow-slate-200/60 dark:border-white/10 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 dark:shadow-sky-500/20';
+  const stepCardClass = isModern
+    ? 'rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-4 shadow-inner shadow-cyan-500/10 backdrop-blur'
+    : 'rounded-3xl border border-slate-200 bg-white/70 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5';
+  const mainCardClass = isModern
+    ? 'relative w-full max-w-md overflow-hidden rounded-3xl border border-cyan-500/30 bg-slate-900/70 p-6 shadow-xl shadow-cyan-500/20 backdrop-blur'
+    : 'relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/70 backdrop-blur dark:border-white/10 dark:bg-slate-900/80 dark:shadow-black/30';
+  const messageCardClass = isModern
+    ? 'space-y-2 rounded-2xl border border-cyan-500/40 bg-slate-900/60 p-4 text-slate-100 shadow-inner shadow-cyan-500/20'
+    : 'space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/60';
+  const metricCardClass = isModern
+    ? 'rounded-2xl border border-cyan-500/40 bg-slate-900/60 p-4 text-xs text-cyan-100 shadow-inner shadow-cyan-500/20'
+    : 'rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-400';
+  const progressClass = isModern
+    ? 'h-full rounded-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500'
+    : 'h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400';
+  const calloutClass = isModern
+    ? 'rounded-2xl border border-cyan-500/40 bg-slate-900/60 p-4 text-xs text-cyan-100 shadow-inner shadow-cyan-500/20'
+    : 'rounded-2xl border border-sky-200 bg-sky-50 p-4 text-xs text-sky-700 dark:border-sky-500/40 dark:bg-sky-500/10 dark:text-sky-100';
+
   return (
     <section id="showcase" className="mx-auto max-w-6xl px-6">
-      <div className="overflow-hidden rounded-[40px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100 shadow-2xl shadow-slate-200/60 dark:border-white/10 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 dark:shadow-sky-500/20">
+      <div className={containerClass}>
         <div className="grid gap-10 p-8 sm:grid-cols-2 sm:p-12">
           <div className="space-y-8">
             <SectionHeader
@@ -37,12 +63,12 @@ const Showcase: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ delay: index * 0.08, duration: 0.5, ease: 'easeOut' }}
-                  className="rounded-3xl border border-slate-200 bg-white/70 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5"
+                  className={stepCardClass}
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300">
+                  <p className={isModern ? 'text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-200' : 'text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300'}>
                     {step.label}
                   </p>
-                  <p className="mt-2 text-sm text-slate-700 dark:text-slate-100">{step.content}</p>
+                  <p className={isModern ? 'mt-2 text-sm text-slate-200/80' : 'mt-2 text-sm text-slate-700 dark:text-slate-100'}>{step.content}</p>
                 </motion.div>
               ))}
             </div>
@@ -54,37 +80,43 @@ const Showcase: React.FC = () => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="relative flex items-center justify-center"
           >
-            <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/70 backdrop-blur dark:border-white/10 dark:bg-slate-900/80 dark:shadow-black/30">
+            <div className={mainCardClass}>
               <div className="grid gap-4">
-                <div className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/60">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">assistant</p>
-                  <p className="text-sm text-slate-700 dark:text-slate-100">
+                <div className={messageCardClass}>
+                  <p className={isModern ? 'text-xs font-medium text-cyan-200/90' : 'text-xs font-medium text-slate-500 dark:text-slate-400'}>assistant</p>
+                  <p className={isModern ? 'text-sm text-slate-100/90' : 'text-sm text-slate-700 dark:text-slate-100'}>
                     Hi Jasmine! Thanks for reaching out about automating scheduling. Based on your policies, the SME bundle fits best at $280/month. I can connect you with Desmond for a walkthrough at 3pm or 5pm today—what works?
                   </p>
-                  <div className="flex flex-wrap items-center gap-2 pt-2 text-[11px] text-sky-700 dark:text-sky-300">
-                    <span className="rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10">pricing-guide.pdf</span>
-                    <span className="rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10">service-policies.docx</span>
+                  <div className={isModern ? 'flex flex-wrap items-center gap-2 pt-2 text-[11px] text-cyan-200/80' : 'flex flex-wrap items-center gap-2 pt-2 text-[11px] text-sky-700 dark:text-sky-300'}>
+                    <span className={isModern ? 'rounded-full border border-cyan-400/40 bg-cyan-400/10 px-2 py-1' : 'rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10'}>pricing-guide.pdf</span>
+                    <span className={isModern ? 'rounded-full border border-cyan-400/40 bg-cyan-400/10 px-2 py-1' : 'rounded-full border border-sky-300 bg-sky-100 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10'}>service-policies.docx</span>
                   </div>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-400">
-                  <p className="font-semibold uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300">time saved</p>
-                  <div className="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800">
+                <div className={metricCardClass}>
+                  <p className={isModern ? 'font-semibold uppercase tracking-[0.35em] text-cyan-200' : 'font-semibold uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300'}>time saved</p>
+                  <div className={isModern ? 'mt-3 h-2 rounded-full bg-slate-800' : 'mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800'}>
                     <motion.div
                       initial={{ width: '0%' }}
                       whileInView={{ width: '92%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-                      className="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400"
+                      className={progressClass}
                     />
                   </div>
                 </div>
-                <div className="rounded-2xl border border-sky-200 bg-sky-50 p-4 text-xs text-sky-700 dark:border-sky-500/40 dark:bg-sky-500/10 dark:text-sky-100">
-                  <p className="font-semibold uppercase tracking-[0.3em]">next action</p>
-                  <p className="mt-2">Push summary + call slots to HubSpot, notify sales channel, log outcome to n8n.</p>
+                <div className={calloutClass}>
+                  <p className={isModern ? 'font-semibold uppercase tracking-[0.35em]' : 'font-semibold uppercase tracking-[0.3em]'}>next action</p>
+                  <p className={isModern ? 'mt-2 text-[13px] text-cyan-100/80' : 'mt-2 text-[13px]'}>Push summary + call slots to HubSpot, notify sales channel, log outcome to n8n.</p>
                 </div>
               </div>
             </div>
-            <div className="pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.25),transparent_65%)] dark:bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.35),transparent_65%)]" />
+            <div
+              className={
+                isModern
+                  ? 'pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.35),_transparent_65%)]'
+                  : 'pointer-events-none absolute -inset-16 -z-10 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.25),transparent_65%)] dark:bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.35),transparent_65%)]'
+              }
+            />
           </motion.div>
         </div>
       </div>
