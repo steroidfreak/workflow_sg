@@ -19,6 +19,7 @@ const promptCarousel = document.getElementById('prompt-carousel');
 const promptNavButtons = document.querySelectorAll('[data-prompt-nav]');
 
 const MAX_FILES = 6;
+const NO_IMAGE_ALERT = 'Add at least one picture. Start with a photo of you so the magic knows who to dress up.';
 let items = [];
 let cameraStream = null;
 let selectedPromptButton = null;
@@ -212,6 +213,19 @@ const setupPromptCarousel = () => {
   promptCarousel.appendChild(fragment);
   promptCarousel.dataset.enhanced = 'true';
 
+  const autoGenerateFromPrompt = () => {
+    if (!generateBtn || generateBtn.disabled) {
+      return;
+    }
+
+    if (!items.length) {
+      alert(NO_IMAGE_ALERT);
+      return;
+    }
+
+    generate();
+  };
+
   promptCarousel.addEventListener('click', (event) => {
     const card = event.target.closest('.prompt-card');
     if (!card) {
@@ -223,7 +237,8 @@ const setupPromptCarousel = () => {
       promptValue = applySurpriseToCard(card);
     }
 
-    updateSelectedPrompt(card, promptValue);
+    updateSelectedPrompt(card, promptValue, { focus: false });
+    autoGenerateFromPrompt();
   });
 
   promptNavButtons.forEach((button) => {
@@ -680,7 +695,7 @@ logoutBtn?.addEventListener('click', async () => {
 
 const generate = async () => {
   if (!items.length) {
-    alert('Add at least one picture. Start with a photo of you so the magic knows who to dress up.');
+    alert(NO_IMAGE_ALERT);
     return;
   }
 
