@@ -23,6 +23,7 @@ const NO_IMAGE_ALERT = 'Add at least one picture. Start with a photo of you so t
 let items = [];
 let cameraStream = null;
 let selectedPromptButton = null;
+let isPromptCarouselLocked = false;
 let isGenerating = false;
 let pendingPromptAutoRun = false;
 
@@ -131,7 +132,7 @@ const createPromptCard = (idea) => {
     button.style.setProperty('--prompt-card-end', idea.colors[1] || idea.colors[0]);
   }
   const badgeContent = idea.badgeImage
-    ? `<img src="${idea.badgeImage}" alt="" class="prompt-card__badge-image">`
+    ? `<img src="${idea.badgeImage}" alt="" class="prompt-card__badge-image" draggable="false">`
     : `<span class="prompt-card__badge">${idea.badge || 'PP'}</span>`;
   button.innerHTML = `
     <span class="prompt-card__art" aria-hidden="true">
@@ -164,6 +165,46 @@ const updateSelectedPrompt = (button, promptValue, { focus = true } = {}) => {
       promptInput.focus({ preventScroll: true });
     }
   }
+};
+
+const lockPromptCarousel = () => {
+  if (!promptCarousel || isPromptCarouselLocked) {
+    return;
+  }
+
+  isPromptCarouselLocked = true;
+  promptCarousel.classList.add('is-locked');
+  promptCarousel.setAttribute('aria-disabled', 'true');
+
+  promptCarousel.querySelectorAll('.prompt-card').forEach((cardButton) => {
+    cardButton.disabled = true;
+    cardButton.setAttribute('aria-disabled', 'true');
+  });
+
+  promptNavButtons.forEach((button) => {
+    button.disabled = true;
+    button.setAttribute('aria-disabled', 'true');
+  });
+};
+
+const unlockPromptCarousel = () => {
+  if (!promptCarousel || !isPromptCarouselLocked) {
+    return;
+  }
+
+  isPromptCarouselLocked = false;
+  promptCarousel.classList.remove('is-locked');
+  promptCarousel.removeAttribute('aria-disabled');
+
+  promptCarousel.querySelectorAll('.prompt-card').forEach((cardButton) => {
+    cardButton.disabled = false;
+    cardButton.removeAttribute('aria-disabled');
+  });
+
+  promptNavButtons.forEach((button) => {
+    button.disabled = false;
+    button.removeAttribute('aria-disabled');
+  });
 };
 
 const buildSurprisePrompt = () => {
@@ -240,18 +281,36 @@ const setupPromptCarousel = () => {
       return;
     }
 
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (isPromptCarouselLocked && card !== selectedPromptButton) {
+      return;
+    }
+
     let promptValue = card.dataset.promptValue || '';
     if (card.dataset.promptType === 'surprise' || !promptValue) {
       promptValue = applySurpriseToCard(card);
     }
 
     updateSelectedPrompt(card, promptValue, { focus: false });
+
+    if (!items.length) {
+      autoGenerateFromPrompt();
+      return;
+    }
+
+    if (isPromptCarouselLocked) {
+      return;
+    }
+
+    lockPromptCarousel();
     autoGenerateFromPrompt();
   });
 
   promptNavButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      if (!promptCarousel) {
+      if (!promptCarousel || isPromptCarouselLocked) {
         return;
       }
       const direction = button.dataset.promptNav === 'prev' ? -1 : 1;
@@ -269,6 +328,7 @@ const clearSelectedPromptIfChanged = () => {
   const currentValue = promptInput.value.trim();
   const selectedValue = (selectedPromptButton.dataset.promptValue || '').trim();
   if (!currentValue || currentValue !== selectedValue) {
+    unlockPromptCarousel();
     selectedPromptButton.classList.remove('is-selected');
     selectedPromptButton.setAttribute('aria-pressed', 'false');
     selectedPromptButton = null;
@@ -780,9 +840,5 @@ generateBtn.addEventListener('click', generate);
 window.addEventListener('beforeunload', revokePreviews);
 ensureAuthenticated();
 renderPreviews();
-
-
-
-
 
 

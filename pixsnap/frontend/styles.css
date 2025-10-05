@@ -405,6 +405,19 @@ button:focus-visible,
   border-radius: 999px;
 }
 
+.prompt-carousel.is-locked {
+  pointer-events: none;
+  touch-action: none;
+}
+
+.prompt-carousel.is-locked .prompt-card {
+  cursor: default;
+}
+
+.prompt-card[disabled] {
+  cursor: default;
+}
+
 .prompt-card {
   flex: 0 0 170px;
   border: none;
