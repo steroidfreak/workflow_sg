@@ -23,6 +23,8 @@ const NO_IMAGE_ALERT = 'Add at least one picture. Start with a photo of you so t
 let items = [];
 let cameraStream = null;
 let selectedPromptButton = null;
+let isGenerating = false;
+let pendingPromptAutoRun = false;
 
 const promptIdeas = [
   {
@@ -189,6 +191,25 @@ const applySurpriseToCard = (button) => {
   return surprise.prompt;
 };
 
+const autoGenerateFromPrompt = () => {
+  if (!generateBtn) {
+    return;
+  }
+
+  if (!items.length) {
+    alert(NO_IMAGE_ALERT);
+    return;
+  }
+
+  if (isGenerating) {
+    pendingPromptAutoRun = true;
+    return;
+  }
+
+  pendingPromptAutoRun = false;
+  generate();
+};
+
 const setupPromptCarousel = () => {
   if (!promptCarousel || promptCarousel.dataset.enhanced === 'true') {
     return;
@@ -212,19 +233,6 @@ const setupPromptCarousel = () => {
   fragment.appendChild(surpriseCard);
   promptCarousel.appendChild(fragment);
   promptCarousel.dataset.enhanced = 'true';
-
-  const autoGenerateFromPrompt = () => {
-    if (!generateBtn || generateBtn.disabled) {
-      return;
-    }
-
-    if (!items.length) {
-      alert(NO_IMAGE_ALERT);
-      return;
-    }
-
-    generate();
-  };
 
   promptCarousel.addEventListener('click', (event) => {
     const card = event.target.closest('.prompt-card');
@@ -573,6 +581,7 @@ previews.addEventListener('click', (event) => {
 resultImages?.addEventListener('click', handleResultImagesClick);
 
 const setGeneratingState = (generating) => {
+  isGenerating = generating;
   generateBtn.disabled = generating;
   if (generating) {
     generateBtn.innerHTML = '<span class="loading">Making magic...</span>';
@@ -595,6 +604,13 @@ const setGeneratingState = (generating) => {
       generationAudio.pause();
       generationAudio.currentTime = 0;
     }
+  }
+
+  if (!generating && pendingPromptAutoRun) {
+    pendingPromptAutoRun = false;
+    window.requestAnimationFrame(() => {
+      autoGenerateFromPrompt();
+    });
   }
 };
 
