@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import FloatingChatWidget from './components/FloatingChatWidget';
 import UseCaseLauncher from './components/UseCaseLauncher';
 import ThemeToggle from './components/ThemeToggle';
+import Component from './components/Component';
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ const App: React.FC = () => {
       </header>
       <Hero />
       <main className="space-y-24 pb-24">
+        <Component />
         <Features />
         <Showcase />
         <ChatPanel />
