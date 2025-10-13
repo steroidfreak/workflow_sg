@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const checklist = [
   {
     label: 'Agent roster',
-    description: 'Review the connected Workflow SG agents and their capabilities before launching a conversation.',
+    description:
+      'Review the connected Workflow SG agents and their capabilities before launching a conversation.',
   },
   {
     label: 'Knowledge packs',
@@ -19,13 +21,19 @@ const checklist = [
 
 export default function Home() {
   const [workspaceReady, setWorkspaceReady] = useState(false);
+  const router = useRouter();
+
+  const handleLauncherClick = () => {
+    setWorkspaceReady(true);
+    router.push('/usecaselauncher');
+  };
 
   return (
     <main>
       <h1>Chatkit Conversation Hub</h1>
       <p>
-        Spin up a focused command center to orchestrate Workflow SG agents, share findings with your team, and keep track of
-        every decision made along the way.
+        Spin up a focused command center to orchestrate Workflow SG agents, share findings with your team, and keep track
+        of every decision made along the way.
       </p>
 
       <ul>
@@ -37,8 +45,14 @@ export default function Home() {
         ))}
       </ul>
 
-      <button type="button" onClick={() => setWorkspaceReady(true)}>
-        {workspaceReady ? 'Workspace Ready ✓' : 'Initialize Workspace'}
+      <button
+        id="usecaselauncher"
+        data-usecaselauncher
+        data-launch-href="/usecaselauncher"
+        type="button"
+        onClick={handleLauncherClick}
+      >
+        {workspaceReady ? 'Re-open Use Case Launcher' : 'Open Use Case Launcher'}
       </button>
 
       {workspaceReady && (
