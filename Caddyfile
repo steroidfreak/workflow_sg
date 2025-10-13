@@ -63,3 +63,17 @@ workflow.sg {
   }
 }
 
+# Chatkit subdomain (Next.js workspace)
+{$CHATKIT_DOMAIN} {
+  encode gzip zstd
+
+  header {
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+
+  reverse_proxy chatkit:3000
+}
+

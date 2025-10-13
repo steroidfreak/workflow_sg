@@ -40,6 +40,15 @@ const useCases: UseCaseItem[] = [
   },
 
   {
+    component: 'ChatkitExperience',
+    title: 'Chatkit Conversation Hub',
+    description:
+      'Spin up the Next.js chat workspace (docker-compose service) to orchestrate agents and collaborate with your team.',
+    ctaLabel: 'Open chatkit.workflow.sg',
+    action: () => openExternal('https://chatkit.workflow.sg'),
+  },
+
+  {
     component: 'WhatsAppTriggerButton',
     title: 'WhatsApp Trigger Button',
     description:
