@@ -1,15 +1,18 @@
 import './globals.css';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, Roboto_Mono } from 'next/font/google';
 import Script from 'next/script';
 
-const geistSans = Geist({
+const sansFont = Inter({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
+const monoFont = Roboto_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+  display: 'swap',
+  weight: ['400'],
 });
 
 export const metadata = {
@@ -20,7 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${sansFont.variable} ${monoFont.variable} antialiased`}>
         {children}
         <Script
           src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
