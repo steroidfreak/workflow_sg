@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import { run, user, assistant } from '@openai/agents';
 import { agent } from './agent.js';
+import { runWorkflow as runWebResearchWorkflow } from './workflows/webResearchWorkflow.js';
 
 const app = express();
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
@@ -46,6 +47,25 @@ app.post('/api/chat', async (req, res, next) => {
     }
 
     res.json({ answer, citations: [] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/workflows/web-research', async (req, res, next) => {
+  try {
+    const inputText = typeof req.body?.input_as_text === 'string' ? req.body.input_as_text.trim() : '';
+
+    if (!inputText) {
+      const error = new Error('input_as_text is required');
+      error.status = 400;
+      error.code = 'BAD_REQUEST';
+      throw error;
+    }
+
+    const result = await runWebResearchWorkflow({ input_as_text: inputText });
+
+    res.json({ ok: true, result });
   } catch (error) {
     next(error);
   }

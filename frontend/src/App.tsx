@@ -3,6 +3,7 @@ import Hero from './components/Hero';
 import Features from './components/Features';
 import Showcase from './components/Showcase';
 import ChatPanel from './components/ChatPanel';
+import WebResearchAgentPanel from './components/WebResearchAgentPanel';
 import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
@@ -39,6 +40,7 @@ const App: React.FC = () => {
         <Component />
         <Features />
         <Showcase />
+        <WebResearchAgentPanel />
         <ChatPanel />
         <Testimonials />
         <CTA />
