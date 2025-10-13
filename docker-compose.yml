@@ -81,6 +81,18 @@ services:
       - workflow
     restart: unless-stopped
 
+  chatkit:
+    build:
+      context: ./my-chatkit-app
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    expose:
+      - "3000"
+    networks:
+      - workflow
+    restart: unless-stopped
+
   caddy:
     image: caddy:2.8-alpine
     depends_on:
@@ -89,6 +101,7 @@ services:
       - nanobanana
       - pixsnap-backend
       - pixsnap-frontend
+      - chatkit
     ports:
       - "80:80"
       - "443:443"
@@ -100,6 +113,7 @@ services:
       - DOMAIN=${DOMAIN:-www.workflow.sg}
       - NANOBANANA_DOMAIN=${NANOBANANA_DOMAIN:-nanobanana.workflow.sg}
       - PIXSNAP_DOMAIN=${PIXSNAP_DOMAIN:-pixsnap.workflow.sg}
+      - CHATKIT_DOMAIN=${CHATKIT_DOMAIN:-chatkit.workflow.sg}
       - CADDY_ADMIN_EMAIL=${CADDY_ADMIN_EMAIL:-admin@workflow.sg}
     networks:
       - workflow
